@@ -53,7 +53,7 @@ namespace LogsManager
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 // Set file filters so that the user can only select text files
-                openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+                openFileDialog.Filter = "Logs Files (*.log)|*.log|Text files (*.txt)|*.txt|All files (*.*)|*.*";
 
                 // Display the open file dialog box and verify that the user has selected the file
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
