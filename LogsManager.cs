@@ -99,15 +99,34 @@ namespace LogsManager
         // Method handles file change
         private void FileChanged(object sender, FileSystemEventArgs e)
         {
-            // Get file, open content and load as richbox string
-            string text = File.ReadAllText(filePath);
-            Invoke(new Action(() =>
+            // Define a helper function to read the file that will retry when an exception is received
+            Action<string> readFile = null;
+            readFile = (filePath) =>
             {
-                richTextBox1.Text = text;
-                richTextBox1.SelectionStart = richTextBox1.TextLength;
-                richTextBox1.ScrollToCaret();
-            }));
+                try
+                {
+                    // Read file
+                    string text = File.ReadAllText(filePath);
+                    // Load file as richTextBox1.text
+                    Invoke(new Action(() =>
+                    {
+                        richTextBox1.Text = text;
+                        richTextBox1.SelectionStart = richTextBox1.TextLength;
+                        richTextBox1.ScrollToCaret();
+                    }));
+                }
+                catch (IOException ex)
+                {
+                    // Handle Exception
+                    Thread.Sleep(500); // Wait 500ms before next try to load file again
+                    readFile(filePath);
+                }
+            };
+
+            // Handle helper method to load file
+            readFile(filePath);
         }
+
 
         private void button2_Click(object sender, EventArgs e)
         {
